@@ -661,12 +661,13 @@ p {
 
 .phone-switcher-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-bottom: var(--space-sm);
 }
 
 .phone-switcher-chip {
-  flex: 1;
+  flex: 1 1 calc(50% - 3px);
   min-width: 0;
   border: 1px solid var(--border);
   background: var(--surface);
@@ -716,13 +717,14 @@ p {
   flex-shrink: 0;
   width: 18px;
   height: 18px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--bg);
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
   font-size: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 /* Header actions: every root screen shows an info affordance (a "GUIDE"
@@ -749,21 +751,33 @@ p {
   transition: border-color 0.3s ease, color 0.3s ease;
 }
 
-.phone-fab-mini {
-  position: absolute;
-  right: 4px;
-  bottom: 4px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--bg);
+/* Matches the app's real AddTile.tsx: a full-width bordered row right
+   under the header, not a floating circular FAB (removed from the app). */
+.phone-addtile {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 14px;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  padding: 5px 8px;
+  margin-bottom: var(--space-sm);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.phone-addtile-plus {
+  color: var(--accent);
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.phone-addtile-label {
+  color: var(--accent);
+  font-size: 0.56rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 /* Matches the app's real BootSplash.tsx exactly: pure black regardless of
@@ -969,5 +983,15 @@ p {
   }
   .section {
     padding: var(--space-2xl) 0;
+  }
+}
+
+@media (max-width: 460px) {
+  .nav-actions .btn.neutral {
+    display: none;
+  }
+  .nav-actions .btn.small {
+    padding: 7px 10px;
+    font-size: 0.75rem;
   }
 }
