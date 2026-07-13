@@ -30,9 +30,14 @@ root.
 
 ## Notes
 
-- The "Download APK" / "View source" links on the Trunk page point at the
-  `trunk-android` repo's releases — update the version in the URL whenever a
-  new release goes out.
+- The "Download Trunk" / "Download latest APK" links point at
+  `trunk-android`'s `releases/latest/download/Trunk-latest-optimised-arm64.apk`
+  - a stable URL that always resolves to whichever release is newest, so this
+  page never needs a version-number edit again. For this to keep working,
+  **every future trunk-android release must also upload an asset literally
+  named `Trunk-latest-optimised-arm64.apk`** (a renamed copy of that
+  release's arm64 build) alongside its version-specific filename - if a
+  release skips this, the link 404s until the next one that includes it.
 - The accent-palette picker on the Trunk page (`trunk/palette-demo.js`) uses
   the exact same `ACCENT_PRESETS` values as the app's `theme/colors.ts`. Keep
   them in sync if the app's palette ever changes. It only *previews* a
