@@ -540,7 +540,10 @@
   color: var(--text-secondary);
   font-size: 0.85rem;
   font-family: "SFMono-Regular", Consolas, monospace;
-  min-height: 1.2em;
+  /* Reserves 2 line-heights, not 1 - on narrow phones the longest caption
+     string wraps to 2 lines while the shortest fits on 1, and without this
+     the #agents section below visibly shifts up/down every autoplay tick. */
+  min-height: 2.4em;
   transition: color 0.2s ease;
 }
 

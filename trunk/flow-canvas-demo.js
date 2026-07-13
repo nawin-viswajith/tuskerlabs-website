@@ -178,7 +178,6 @@
       nodeEls[id] = el;
 
       var card = el.querySelector(".flow-canvas-card");
-      var dragging = false;
       var longPressTimer = null;
       var startX, startY, origX, origY;
 
@@ -190,22 +189,16 @@
         }
       }
 
-      card.addEventListener("pointerdown", function (e) {
-        dragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        origX = node.x;
-        origY = node.y;
-        card.setPointerCapture(e.pointerId);
-        card.classList.add("holding");
-        longPressTimer = setTimeout(function () {
-          longPressTimer = null;
-          dragging = false;
-          removeNode(id);
-        }, LONG_PRESS_MS);
-      });
-      card.addEventListener("pointermove", function (e) {
-        if (!dragging) return;
+      // Drag continuation is handled on `window`, not just this card, once
+      // a drag starts - relying solely on this small ~150x76px card's own
+      // pointermove + setPointerCapture means a drag silently dies the
+      // moment a touch drifts off the card's original bounds on any mobile
+      // browser where pointer capture doesn't hold reliably. Listening on
+      // window guarantees the drag keeps tracking the finger regardless.
+      var activePointerId = null;
+
+      function onWindowPointerMove(e) {
+        if (e.pointerId !== activePointerId) return;
         var dx = e.clientX - startX, dy = e.clientY - startY;
         if (longPressTimer && Math.hypot(dx, dy) > DRAG_CANCEL_THRESHOLD) cancelLongPress();
         node.x = origX + dx;
@@ -214,12 +207,41 @@
         el.style.left = node.x + "px";
         el.style.top = node.y + "px";
         drawLines();
-      });
-      card.addEventListener("pointerup", function () {
-        dragging = false;
+        e.preventDefault();
+      }
+
+      function endDrag(e) {
+        if (e && e.pointerId !== activePointerId) return;
+        activePointerId = null;
         cancelLongPress();
+        window.removeEventListener("pointermove", onWindowPointerMove);
+        window.removeEventListener("pointerup", endDrag);
+        window.removeEventListener("pointercancel", endDrag);
+      }
+
+      card.addEventListener("pointerdown", function (e) {
+        activePointerId = e.pointerId;
+        startX = e.clientX;
+        startY = e.clientY;
+        origX = node.x;
+        origY = node.y;
+        try {
+          card.setPointerCapture(e.pointerId);
+        } catch (err) {}
+        card.classList.add("holding");
+        window.addEventListener("pointermove", onWindowPointerMove);
+        window.addEventListener("pointerup", endDrag);
+        window.addEventListener("pointercancel", endDrag);
+        longPressTimer = setTimeout(function () {
+          longPressTimer = null;
+          // render() (inside removeNode) tears down this card's DOM node -
+          // clean up the window-level drag listeners first, or they'd leak
+          // and keep firing against a detached element.
+          endDrag();
+          removeNode(id);
+        }, LONG_PRESS_MS);
+        e.preventDefault();
       });
-      card.addEventListener("pointerleave", cancelLongPress);
 
       el.querySelector('[data-handle="out"]').addEventListener("click", function () {
         pendingSource = pendingSource === id ? null : id;

@@ -41,6 +41,14 @@
     document.querySelectorAll(".swatch").forEach(function (el) {
       el.classList.toggle("active", el.dataset.name === preset.name);
     });
+    // A blanket CSS-variable change alone barely shows, since most of the
+    // page intentionally doesn't reference --accent - recolor a couple of
+    // words in the paragraph right above the swatches too, so tapping one
+    // visibly does something even if you're not looking at a link/number.
+    var live1 = document.getElementById("palette-live-1");
+    var live2 = document.getElementById("palette-live-2");
+    if (live1) live1.style.color = preset.primary[s];
+    if (live2) live2.style.color = preset.secondary[s];
   }
 
   PRESETS.forEach(function (preset) {
