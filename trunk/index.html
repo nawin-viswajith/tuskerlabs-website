@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trunk, by TuskerLabs</title>
+  <meta name="description" content="Trunk runs LLMs entirely on your Android phone. No cloud, no server, no account." />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/trunk/style.css" />
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("tuskerlabs-theme"); } catch (e) {}
+      if (saved) document.documentElement.setAttribute("data-theme", saved);
+    })();
+  </script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <a class="brand-link" href="/trunk/index.html">
+          <img src="/assets/logo.svg" alt="Trunk" />
+          Trunk
+        </a>
+        <a class="sub" href="/index.html">by TuskerLabs</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="/trunk/playground.html">Playground</a></li>
+        <li><a href="#design">Design</a></li>
+        <li><a href="#opensource">Open Source</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle theme">☾</button>
+        <a class="btn small neutral" href="/index.html">TuskerLabs</a>
+        <a class="btn small" href="https://github.com/nawin-viswajith/trunk-android/releases/download/v1.0.0/Trunk-v1.0.0.apk">Download Trunk</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero section">
+    <div class="wrap hero-inner">
+      <div class="reveal hero-mark">
+        <img src="/assets/logo.svg" alt="Trunk" />
+      </div>
+      <div class="reveal">
+        <h1 class="hero-title">Trunk</h1>
+        <div class="hero-by">by TuskerLabs</div>
+        <p class="hero-tagline">Local inference engine for LLMs on your phone.</p>
+        <p class="section-lede" style="margin: var(--space-md) auto var(--space-xl);">
+          Search Hugging Face, download a GGUF model straight to your device, and chat with it completely offline.
+          No cloud, no server, and no account required. Nothing you type is ever sent anywhere.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="https://github.com/nawin-viswajith/trunk-android/releases/download/v1.0.0/Trunk-v1.0.0.apk">Download Trunk</a>
+          <a class="btn neutral" href="https://github.com/nawin-viswajith/trunk-android" target="_blank" rel="noopener">View source</a>
+        </div>
+        <div class="text-secondary" style="font-size: 0.78rem; margin-top: var(--space-sm);">Android · MIT licensed · v1.0.0</div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="features">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">One app, four moving parts</h2>
+      </div>
+      <div class="reveal-group feature-grid">
+        <div class="card">
+          <div class="feature-glyph">▤</div>
+          <h3 class="feature-title">Models</h3>
+          <p class="feature-desc">
+            Search Hugging Face or browse a live Popular list. Download a GGUF model straight to your phone, or
+            import one you already have. A compatibility badge is computed live from your device's own memory.
+          </p>
+        </div>
+        <div class="card">
+          <div class="feature-glyph">◧</div>
+          <h3 class="feature-title">Projects</h3>
+          <p class="feature-desc">
+            Bind a downloaded model to your own generation settings: temperature, top-p, top-k, context length, and
+            max tokens. Review per-session token and speed history any time.
+          </p>
+        </div>
+        <a class="card" href="/trunk/playground.html" style="display: block; color: inherit;">
+          <div class="feature-glyph">◈</div>
+          <h3 class="feature-title">Playground</h3>
+          <p class="feature-desc">
+            Build reusable Agents, a name plus a system prompt, hand-written or drafted by the loaded model from a
+            plain-language description. Wire several into a linear Flow and watch each step run live.
+          </p>
+          <span style="color: var(--accent); font-weight: 700; font-size: 0.85rem; display: inline-block; margin-top: var(--space-sm);">This is our USP →</span>
+        </a>
+        <div class="card">
+          <div class="feature-glyph">▷</div>
+          <h3 class="feature-title">Inference</h3>
+          <p class="feature-desc">
+            Chat with a project's model, or run a saved Flow instead. Multiple sessions per project, full markdown
+            rendering, all running entirely on-device.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="playground-preview">
+    <div class="wrap howitworks-grid">
+      <div class="reveal">
+        <div class="section-label">Playground</div>
+        <h2 class="section-title">Chain agents into a Flow, not just one prompt</h2>
+        <p class="section-lede" style="margin-bottom: var(--space-xl);">
+          Wire reusable Agents together on a touch canvas: tap an output handle, then an input handle, to connect two
+          nodes in order. Run the whole chain on-device and watch each step complete before the final result.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="/trunk/playground.html">Try the Playground →</a>
+        </div>
+      </div>
+      <div class="reveal canvas-illustration">
+        <div class="canvas-illustration-card">
+          <div class="canvas-illustration-card-label">Explainer</div>
+        </div>
+        <span class="canvas-illustration-handle"></span>
+        <span class="canvas-illustration-line"></span>
+        <span class="canvas-illustration-handle"></span>
+        <div class="canvas-illustration-card">
+          <div class="canvas-illustration-card-label">Formatter</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="offline">
+    <div class="wrap">
+      <div class="reveal" style="text-align: center; max-width: 620px; margin: 0 auto var(--space-2xl);">
+        <div class="section-label" style="justify-content: center; display: flex;">Offline-first</div>
+        <h2 class="section-title">Nothing leaves your phone.</h2>
+        <p class="section-lede" style="margin: 0 auto;">
+          Every model runs through llama.cpp compiled directly into the app. There's no backend in the loop for
+          inference or model storage, so there's nothing to intercept.
+        </p>
+      </div>
+      <div class="reveal-group stat-grid">
+        <div class="stat-card">
+          <div class="stat-number" style="color: var(--accent);">0</div>
+          <div class="stat-label">Servers your chats touch</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color: var(--accent-secondary);">0</div>
+          <div class="stat-label">Accounts required</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color: var(--accent-tertiary);">100%</div>
+          <div class="stat-label">On-device inference</div>
+        </div>
+      </div>
+      <p class="text-secondary" style="text-align: center; font-size: 0.8rem; max-width: 560px; margin: var(--space-lg) auto 0;">
+        This describes Trunk today. On-device is the default and always will be; if optional external model
+        providers are ever added, they'll be opt-in, never a requirement.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="howitworks">
+    <div class="wrap howitworks-grid">
+      <div>
+        <div class="reveal">
+          <div class="section-label">How it works</div>
+          <h2 class="section-title">From install to first chat</h2>
+        </div>
+        <div class="reveal-group steps" id="howitworks-steps">
+        <div class="step" data-screen="onboard">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title">First launch</div>
+            <div class="step-desc">A short intro and one-time setup for theme, palette, and stats display.</div>
+          </div>
+        </div>
+        <div class="step" data-screen="home">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title">Home</div>
+            <div class="step-desc">Your device's RAM and storage, plus a suggested max model size.</div>
+          </div>
+        </div>
+        <div class="step" data-screen="models">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title">Models</div>
+            <div class="step-desc">Search, download, or import a GGUF model.</div>
+          </div>
+        </div>
+        <div class="step" data-screen="projects">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-title">Projects</div>
+            <div class="step-desc">Bind a model to your own generation settings.</div>
+          </div>
+        </div>
+        <div class="step" data-screen="playground">
+          <div class="step-num">5</div>
+          <div>
+            <div class="step-title">Playground</div>
+            <div class="step-desc">Chain reusable Agents into a Flow.</div>
+          </div>
+        </div>
+        <div class="step" data-screen="inference">
+          <div class="step-num">6</div>
+          <div>
+            <div class="step-title">Inference</div>
+            <div class="step-desc">Chat with a project's model, or run a Flow, fully offline.</div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="reveal phone-shell">
+        <div class="phone-bezel">
+          <div class="phone-punch-hole"></div>
+          <div class="phone-screen">
+            <div class="phone-statusbar">
+              <span class="phone-time">12:34</span>
+              <span class="phone-battery-icon"><span class="phone-battery-fill"></span></span>
+            </div>
+            <div class="phone-content" id="phone-content-stack">
+              <div class="phone-screen-variant active" data-screen="loading">
+                <div class="phone-loading">
+                  <img src="/assets/logo.svg" class="phone-loading-logo" alt="" />
+                  <div class="phone-loading-title">Trunk</div>
+                  <div class="phone-loading-subtitle">by TuskerLabs</div>
+                </div>
+              </div>
+              <div class="phone-screen-variant" data-screen="onboard">
+                <div class="phone-onboard">
+                  <img src="/assets/logo.svg" class="phone-onboard-logo" alt="" />
+                  <div class="phone-onboard-title">Welcome to Trunk</div>
+                  <div class="phone-onboard-desc">Run large language models fully offline, entirely on your own device.</div>
+                </div>
+                <div class="phone-onboard-actions">
+                  <span class="phone-onboard-skip">Skip</span>
+                  <span class="phone-onboard-next">Next</span>
+                </div>
+              </div>
+              <div class="phone-screen-variant" data-screen="home">
+                <div class="phone-header">
+                  <span class="phone-title">Home</span>
+                  <div class="phone-header-actions">
+                    <span class="phone-info-btn">i</span>
+                    <span class="phone-settings">SETTINGS</span>
+                  </div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">This Device</div>
+                  <div class="phone-card-line">10.9 GB RAM</div>
+                  <div class="phone-accent-box">
+                    <div class="phone-accent-label">Suggested model size</div>
+                    <div class="phone-accent-value">up to ~8.3B parameters (Q4)</div>
+                  </div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">Library</div>
+                  <div class="phone-card-line">3 models downloaded</div>
+                </div>
+              </div>
+              <div class="phone-screen-variant" data-screen="models">
+                <div class="phone-header">
+                  <span class="phone-title">Models</span>
+                  <div class="phone-header-actions">
+                    <span class="phone-settings">GUIDE</span>
+                    <span class="phone-settings">SETTINGS</span>
+                  </div>
+                </div>
+                <div class="phone-search-bar">Search Hugging Face...</div>
+                <div class="phone-card">
+                  <div class="phone-card-title">llama-3.2-1b-instruct-q8_0.gguf</div>
+                  <div class="phone-card-line">1.3 GB · Downloaded</div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">qwen2.5-coder-3b-q4.gguf</div>
+                  <div class="phone-card-line">2.1 GB · Downloaded</div>
+                </div>
+                <span class="phone-fab-mini">+</span>
+              </div>
+              <div class="phone-screen-variant" data-screen="projects">
+                <div class="phone-header">
+                  <span class="phone-title">Projects</span>
+                  <div class="phone-header-actions">
+                    <span class="phone-settings">GUIDE</span>
+                    <span class="phone-settings">SETTINGS</span>
+                  </div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">Test</div>
+                  <div class="phone-card-line">llama-3.2-1b · temp 0.7</div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">Coding Helper</div>
+                  <div class="phone-card-line">qwen2.5-coder-3b · temp 0.3</div>
+                </div>
+                <span class="phone-fab-mini">+</span>
+              </div>
+              <div class="phone-screen-variant" data-screen="playground">
+                <div class="phone-header">
+                  <span class="phone-title">Playground</span>
+                  <div class="phone-header-actions">
+                    <span class="phone-settings">GUIDE</span>
+                    <span class="phone-settings">SETTINGS</span>
+                  </div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">Write &amp; Review</div>
+                  <div class="phone-mini-flow">
+                    <span class="phone-mini-node">Summarizer</span>
+                    <span class="phone-mini-arrow">→</span>
+                    <span class="phone-mini-node">Reviewer</span>
+                  </div>
+                </div>
+                <span class="phone-fab-mini">+</span>
+              </div>
+              <div class="phone-screen-variant" data-screen="inference">
+                <div class="phone-header">
+                  <span class="phone-title">Inference</span>
+                  <div class="phone-header-actions">
+                    <span class="phone-settings">GUIDE</span>
+                    <span class="phone-settings">SETTINGS</span>
+                  </div>
+                </div>
+                <div class="phone-switcher-row">
+                  <div class="phone-switcher-chip">
+                    <div class="phone-switcher-role">Project</div>
+                    <div class="phone-switcher-value">Coding Helper ›</div>
+                  </div>
+                  <div class="phone-switcher-chip">
+                    <div class="phone-switcher-role">Flow</div>
+                    <div class="phone-switcher-value">Direct chat ›</div>
+                  </div>
+                </div>
+                <div class="phone-chat-scroll">
+                  <div class="phone-chat-bubble user">Explain quicksort briefly</div>
+                  <div class="phone-chat-bubble assistant">Quicksort picks a pivot, partitions the array around it, then recurses on each half.</div>
+                </div>
+                <div class="phone-prompt-row">
+                  <div class="phone-prompt-input">Ask anything...</div>
+                  <span class="phone-prompt-send">➤</span>
+                </div>
+              </div>
+            </div>
+            <div class="phone-tabbar hidden" id="phone-tabbar">
+              <span class="phone-tab active" data-tab="home">⌂</span>
+              <span class="phone-tab" data-tab="models">▤</span>
+              <span class="phone-tab" data-tab="projects">◧</span>
+              <span class="phone-tab" data-tab="playground">◈</span>
+              <span class="phone-tab" data-tab="inference">▷</span>
+            </div>
+            <div class="phone-home-indicator"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="design">
+    <div class="wrap">
+      <div class="palette-demo-inner">
+        <div class="reveal phone-shell">
+          <div class="phone-bezel">
+            <div class="phone-punch-hole"></div>
+            <div class="phone-screen">
+              <div class="phone-statusbar">
+                <span class="phone-time">12:34</span>
+                <span class="phone-battery-icon"><span class="phone-battery-fill"></span></span>
+              </div>
+              <div class="phone-content">
+                <div class="phone-header">
+                  <span class="phone-title">Home</span>
+                  <div class="phone-header-actions">
+                    <span class="phone-info-btn">i</span>
+                    <span class="phone-settings">SETTINGS</span>
+                  </div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">This Device</div>
+                  <div class="phone-card-line">10.9 GB RAM</div>
+                  <div class="phone-accent-box">
+                    <div class="phone-accent-label">Suggested model size</div>
+                    <div class="phone-accent-value">up to ~8.3B parameters (Q4)</div>
+                  </div>
+                </div>
+                <div class="phone-card">
+                  <div class="phone-card-title">Library</div>
+                  <div class="phone-card-line">3 models downloaded</div>
+                </div>
+                <div class="phone-tabbar">
+                  <span class="phone-tab active">⌂</span>
+                  <span class="phone-tab">▤</span>
+                  <span class="phone-tab">◧</span>
+                  <span class="phone-tab">◈</span>
+                  <span class="phone-tab">▷</span>
+                </div>
+              </div>
+              <div class="phone-home-indicator"></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="reveal">
+            <div class="section-label">Design</div>
+            <h2 class="section-title">Same design system. Live.</h2>
+            <p class="section-lede">
+              Trunk ships six accent palettes plus Greyscale, each independently tuned for light and dark mode, and a
+              custom hex picker if none of them fit. This entire site runs on the same tokens. Tap a swatch below,
+              it's the exact palette system used inside the app.
+            </p>
+          </div>
+          <div class="reveal palette-box">
+            <div class="swatch-row" id="swatch-row"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="opensource" style="border-bottom: none;">
+    <div class="wrap" style="text-align: center;">
+      <div class="reveal" style="max-width: 560px; margin: 0 auto;">
+        <div class="section-label" style="justify-content: center; display: flex;">Open Source</div>
+        <h2 class="section-title">MIT licensed.</h2>
+        <p class="section-lede" style="margin: 0 auto var(--space-xl);">
+          Contributions and issues are welcome. Read the source, fork it, ship your own build.
+        </p>
+        <div class="hero-actions" style="justify-content: center;">
+          <a class="btn" href="https://github.com/nawin-viswajith/trunk-android/releases/download/v1.0.0/Trunk-v1.0.0.apk">Download latest APK</a>
+          <a class="btn neutral" href="https://github.com/nawin-viswajith/trunk-android" target="_blank" rel="noopener">View source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img src="/assets/logo.svg" alt="TuskerLabs" />
+        Trunk is open source software from TuskerLabs, licensed under the MIT License.
+      </div>
+      <ul class="footer-links">
+        <li><a href="/index.html">TuskerLabs</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="https://forms.cloud.microsoft/r/ZetxpjPEkA" target="_blank" rel="noopener">Feedback</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script src="/trunk/palette-demo.js"></script>
+  <script src="/trunk/phone-preview.js"></script>
+</body>
+</html>

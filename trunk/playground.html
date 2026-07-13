@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Playground, Trunk by TuskerLabs</title>
+  <meta name="description" content="Chain reusable Agents into a Flow and run multi-step AI pipelines entirely on-device, no cloud involved." />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/trunk/style.css" />
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("tuskerlabs-theme"); } catch (e) {}
+      if (saved) document.documentElement.setAttribute("data-theme", saved);
+    })();
+  </script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <a class="brand-link" href="/trunk/index.html">
+          <img src="/assets/logo.svg" alt="Trunk" />
+          Trunk
+        </a>
+        <a class="sub" href="/index.html">by TuskerLabs</a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/trunk/index.html#features">Features</a></li>
+        <li><a href="/trunk/playground.html">Playground</a></li>
+        <li><a href="/trunk/index.html#design">Design</a></li>
+        <li><a href="/trunk/index.html#opensource">Open Source</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle theme">☾</button>
+        <a class="btn small neutral" href="/index.html">TuskerLabs</a>
+        <a class="btn small" href="https://github.com/nawin-viswajith/trunk-android/releases/download/v1.0.0/Trunk-v1.0.0.apk">Download Trunk</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="section" style="padding-top: var(--space-3xl);">
+    <div class="wrap howitworks-grid">
+      <div class="reveal">
+        <div class="section-label">Playground · what makes Trunk different</div>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin-bottom: var(--space-lg);">
+          Most on-device chat apps stop at one turn. Trunk lets you build a pipeline.
+        </h1>
+        <p class="section-lede usp-lede" style="max-width: none; text-align: justify; margin-bottom: 0;">
+          A single prompt-and-response is fine for a question. It's the wrong shape for
+          <span class="usp-quote">"brainstorm this, then turn it into code, then clean up the explanation."</span>
+          Playground is Trunk's answer: <span class="usp-highlight">chain reusable Agents into a linear Flow</span>,
+          and run the whole thing <span class="usp-highlight">on-device, no cloud round-trip between steps</span>.
+        </p>
+      </div>
+      <div class="reveal phone-shell">
+        <div class="phone-bezel">
+          <div class="phone-punch-hole"></div>
+          <div class="phone-screen">
+            <div class="phone-statusbar">
+              <span class="phone-time">12:34</span>
+              <span class="phone-battery-icon"><span class="phone-battery-fill"></span></span>
+            </div>
+            <div class="phone-content">
+              <div class="phone-header">
+                <span class="phone-title">Playground</span>
+                <div class="phone-header-actions">
+                  <span class="phone-settings">GUIDE</span>
+                  <span class="phone-settings">SETTINGS</span>
+                </div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-title">Write &amp; Review</div>
+                <div class="phone-mini-flow">
+                  <span class="phone-mini-node">Summarizer</span>
+                  <span class="phone-mini-arrow">→</span>
+                  <span class="phone-mini-node">Reviewer</span>
+                </div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-title">Explain &amp; Code</div>
+                <div class="phone-mini-flow">
+                  <span class="phone-mini-node">Explainer</span>
+                  <span class="phone-mini-arrow">→</span>
+                  <span class="phone-mini-node">Coder</span>
+                </div>
+              </div>
+              <span class="phone-fab-mini">+</span>
+              <div class="phone-tabbar">
+                <span class="phone-tab">⌂</span>
+                <span class="phone-tab">▤</span>
+                <span class="phone-tab">◧</span>
+                <span class="phone-tab active">◈</span>
+                <span class="phone-tab">▷</span>
+              </div>
+            </div>
+            <div class="phone-home-indicator"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="reveal flow-canvas-wrap">
+        <div class="flow-canvas-label">Try it: drag agents around, tap an output dot then an input dot to connect, tap the × on a connection to remove it, hold an agent to delete it, tap + to add one.</div>
+        <div class="flow-canvas" id="flow-canvas">
+          <svg class="flow-canvas-lines" id="flow-canvas-lines"></svg>
+          <button class="flow-fab" id="flow-fab" aria-label="Add agent">+</button>
+          <div class="flow-fab-menu" id="flow-fab-menu"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-label">How a Flow runs</div>
+        <h2 class="section-title">One input, several specialized passes</h2>
+        <p class="section-lede" style="max-width: none; text-align: justify;">
+          An Agent is deliberately small: a name and a system prompt, nothing else. Wire a few together and each one
+          only has to be good at its own step. Below, a "Brainstorm" agent's output becomes a "Code writer" agent's
+          input, whose output becomes a "Formatter" agent's input, three narrow jobs standing in for one that would
+          otherwise be too vague to prompt well. Tap any node to read the exact prompt driving that step.
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="flow-diagram" id="flow-diagram">
+          <div class="flow-node" id="fd-node-1" tabindex="0" role="button" data-prompt="Generate 3 rough, meaningfully different approaches to the problem. A sentence or two each, no code yet, just direction.">
+            <div class="flow-node-label">Brainstorm</div>
+            <div class="flow-node-desc">"Generate 3 rough approaches"</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" id="fd-node-2" tabindex="0" role="button" data-prompt="Take the strongest approach you're given and implement it as working code. Assume the reader can read code but hasn't seen the brainstorm step.">
+            <div class="flow-node-label">Code writer</div>
+            <div class="flow-node-desc">"Implement the strongest one"</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" id="fd-node-3" tabindex="0" role="button" data-prompt="Clean up the code and explanation you're given into one final, readable answer. Don't change the logic, just the presentation.">
+            <div class="flow-node-label">Formatter</div>
+            <div class="flow-node-desc">"Clean up and explain the result"</div>
+          </div>
+        </div>
+        <div class="flow-diagram-caption" id="flow-diagram-caption">Input: "Explain quicksort, with working code"</div>
+      </div>
+    </div>
+    <div class="node-modal-backdrop" id="node-modal-backdrop">
+      <div class="node-modal-card">
+        <div class="node-modal-title" id="node-modal-title"></div>
+        <div class="node-modal-message" id="node-modal-message"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="agents">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-label">Agents</div>
+        <h2 class="section-title">A reusable library, not a one-off prompt</h2>
+      </div>
+      <div class="reveal-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-lg);">
+        <div class="card">
+          <h3 style="font-size: 1.02rem; margin-bottom: var(--space-sm);">Write it yourself</h3>
+          <p class="feature-desc">
+            Name the agent, write its system prompt directly. Save it once, reuse it across as many Flows as you
+            want.
+          </p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1.02rem; margin-bottom: var(--space-sm);">Or let the model draft it</h3>
+          <p class="feature-desc">
+            Describe the agent's purpose in plain language and the currently-loaded model writes the system prompt
+            for you, entirely on-device. Review and edit before saving; nothing is ever auto-committed.
+          </p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1.02rem; margin-bottom: var(--space-sm);">Shared model, distinct personas</h3>
+          <p class="feature-desc">
+            Every agent in a Flow shares whichever model is currently loaded, an agent is a different system prompt,
+            not a different model download, so switching between them is instant.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="canvas" style="border-bottom: none;">
+    <div class="wrap howitworks-grid">
+      <div class="reveal">
+        <div class="section-label">The canvas</div>
+        <h2 class="section-title">Wire it by touch, not by config file</h2>
+        <p class="section-lede" style="margin-bottom: var(--space-xl);">
+          Drop Agents onto a canvas, drag them into place, then tap an output handle followed by an input handle to
+          connect two nodes in order. No YAML, no node-graph SDK, just touch. Assign a model and generation settings
+          to the Flow once, then run it whenever the input changes.
+        </p>
+        <div class="hero-actions">
+          <a class="btn" href="/trunk/index.html#opensource">Get Trunk</a>
+          <a class="btn neutral" href="/trunk/index.html">Back to overview</a>
+        </div>
+      </div>
+      <div class="reveal canvas-illustration">
+        <div class="canvas-illustration-card">
+          <div class="canvas-illustration-card-label">Explainer</div>
+        </div>
+        <span class="canvas-illustration-handle"></span>
+        <span class="canvas-illustration-line"></span>
+        <span class="canvas-illustration-handle"></span>
+        <div class="canvas-illustration-card">
+          <div class="canvas-illustration-card-label">Formatter</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img src="/assets/logo.svg" alt="TuskerLabs" />
+        Trunk is open source software from TuskerLabs, licensed under the MIT License.
+      </div>
+      <ul class="footer-links">
+        <li><a href="/index.html">TuskerLabs</a></li>
+        <li><a href="/trunk/index.html">Overview</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script src="/trunk/flow-canvas-demo.js"></script>
+  <script src="/trunk/flow-animation-demo.js"></script>
+</body>
+</html>

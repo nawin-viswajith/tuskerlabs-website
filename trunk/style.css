@@ -1,0 +1,694 @@
+/* Trunk product page - extends the shared TuskerLabs design system */
+
+.hero {
+  padding-top: var(--space-3xl);
+}
+
+.usp-lede {
+  font-size: 1.1rem;
+}
+
+.usp-quote {
+  display: inline-block;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 7px;
+  margin: 2px 0;
+}
+
+.usp-highlight {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ---- interactive flow-canvas demo (Playground hero) ---- */
+
+.flow-canvas-wrap {
+  margin-top: var(--space-2xl);
+}
+
+.flow-canvas-label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-align: center;
+  margin-bottom: var(--space-sm);
+}
+
+.flow-canvas {
+  position: relative;
+  height: 300px;
+  border: 1.5px solid var(--text-secondary);
+  background: var(--bg);
+  overflow: hidden;
+  touch-action: none;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.flow-canvas-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.flow-canvas-line {
+  stroke: var(--accent-tertiary);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke 0.2s ease;
+}
+
+/* Exact dimensions from FlowNodeView.tsx: NODE_WIDTH=150, NODE_HEIGHT=76,
+   HANDLE_SIZE=18. Sharp corners throughout, no border-radius on the card
+   itself - handles are the one deliberate circular exception, same as the
+   app (connector ports read naturally as dots, same spirit as palette
+   swatches). */
+
+.flow-canvas-node {
+  position: absolute;
+  width: 150px;
+  height: 76px;
+}
+
+.flow-canvas-card {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 17px;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: border-color 0.2s ease;
+}
+
+.flow-canvas-card:active {
+  cursor: grabbing;
+}
+
+.flow-canvas-card.is-start {
+  border-color: var(--accent);
+  border-left-width: 3px;
+}
+
+.flow-canvas-card.is-end {
+  border-color: var(--accent-secondary);
+  border-right-width: 3px;
+}
+
+.flow-canvas-node-label {
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.flow-canvas-node-tag {
+  font-size: 0.56rem;
+  font-weight: 700;
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+
+.flow-canvas-node-tag-start {
+  color: var(--accent);
+}
+
+.flow-canvas-node-tag-end {
+  color: var(--accent-secondary);
+}
+
+.flow-canvas-handle {
+  position: absolute;
+  top: 29px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-secondary);
+  background: var(--bg);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.flow-canvas-handle-in {
+  left: -9px;
+}
+
+.flow-canvas-handle-out {
+  left: 141px;
+}
+
+.flow-canvas-handle:hover {
+  border-color: var(--accent);
+}
+
+.flow-canvas-handle.pending {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.flow-canvas-handle.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flow-canvas-badge {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-tertiary);
+  background: var(--bg);
+  color: var(--accent-tertiary);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* FAB matches FlowListScreen.tsx's real add-button exactly: 52px circle,
+   accent fill, background-colored "+" label. Its menu matches the same
+   file's menu (bordered surface panel, divided rows). */
+
+.flow-fab {
+  position: absolute;
+  right: var(--space-md);
+  bottom: var(--space-md);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.flow-fab-menu {
+  position: absolute;
+  right: var(--space-md);
+  bottom: calc(52px + var(--space-md) + var(--space-sm));
+  min-width: 190px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: none;
+  flex-direction: column;
+  z-index: 5;
+}
+
+.flow-fab-menu.open {
+  display: flex;
+}
+
+.flow-fab-menu-item {
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+}
+
+.flow-fab-menu-item:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.flow-fab-menu-divider {
+  height: 1px;
+  background: var(--border);
+}
+
+.flow-fab-menu-empty {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.flow-canvas-card.holding {
+  border-color: var(--error);
+  opacity: 0.6;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.hero-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-mark img {
+  width: 84px;
+  height: 84px;
+  margin-bottom: var(--space-lg);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 10vw, 5.5rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.hero-by {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  font-weight: 700;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---- feature grid ---- */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-lg);
+}
+
+.feature-glyph {
+  font-size: 1.8rem;
+  color: var(--accent);
+  margin-bottom: var(--space-md);
+  line-height: 1;
+}
+
+.feature-title {
+  font-size: 1.05rem;
+  margin-bottom: var(--space-sm);
+}
+
+.feature-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  text-align: justify;
+}
+
+/* ---- stat grid ---- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-lg);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.stat-card {
+  border: 1px solid var(--border);
+  padding: var(--space-lg);
+  text-align: center;
+  transition: border-color 0.25s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--text-secondary);
+}
+
+.stat-number {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* ---- steps ---- */
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 640px;
+}
+
+.step {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: flex-start;
+  padding: var(--space-md) 0;
+  border-left: 2px solid var(--border);
+  padding-left: var(--space-lg);
+  position: relative;
+  transition: border-color 0.25s ease;
+}
+
+.step:hover,
+.step.active {
+  border-left-color: var(--accent);
+}
+
+.step-num {
+  position: absolute;
+  left: -15px;
+  top: var(--space-md);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.step:hover .step-num,
+.step.active .step-num {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.step-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  margin-bottom: 2px;
+}
+
+.step-desc {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+/* ---- palette demo ---- */
+
+.palette-demo-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.palette-box {
+  display: inline-block;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+
+.swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+/* Phone mockup styles moved to the shared css/styles.css so both the
+   TuskerLabs homepage and every Trunk page can place one. */
+
+.howitworks-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .howitworks-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 680px) {
+  .palette-demo-inner {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+/* ---- flow diagram (Playground page) ---- */
+
+.flow-diagram {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.flow-node {
+  flex: 1;
+  min-width: 180px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent-secondary);
+  background: var(--surface);
+  padding: var(--space-md);
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.flow-node:hover {
+  border-color: var(--accent);
+}
+
+.flow-node.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+/* ---- node prompt preview: same shape as the app's ConfirmModal (dimmed
+   backdrop, flat card, accent top-border) so this reads as the same
+   "notification" pattern as the rest of the product. ---- */
+
+.node-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  z-index: 50;
+}
+
+.node-modal-backdrop.open {
+  display: flex;
+}
+
+.node-modal-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+}
+
+.node-modal-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  padding: var(--space-lg) var(--space-lg) var(--space-sm);
+}
+
+.node-modal-message {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  padding: 0 var(--space-lg) var(--space-lg);
+}
+
+.flow-diagram-caption {
+  margin-top: var(--space-md);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  min-height: 1.2em;
+  transition: color 0.2s ease;
+}
+
+.flow-diagram-caption.done {
+  color: var(--running);
+  font-weight: 700;
+}
+
+.flow-node-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: var(--space-xs);
+}
+
+.flow-node-desc {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  padding: 0 var(--space-xs);
+}
+
+@media (max-width: 700px) {
+  .flow-diagram {
+    flex-direction: column;
+  }
+  .flow-arrow {
+    transform: rotate(90deg);
+    padding: var(--space-xs) 0;
+  }
+}
+
+.canvas-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.canvas-illustration-card {
+  width: 130px;
+  padding: var(--space-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.canvas-illustration-card-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.canvas-illustration-handle {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  background: var(--bg);
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+.canvas-illustration-line {
+  width: 40px;
+  height: 2px;
+  background: var(--accent-tertiary);
+  flex-shrink: 0;
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+  font-family: var(--font-body);
+}
+
+.swatch-balls {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  position: relative;
+}
+
+.swatch-ball {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  transition: transform 0.2s ease;
+}
+
+.swatch-ball + .swatch-ball {
+  margin-left: -14px;
+}
+
+.swatch:hover .swatch-ball {
+  transform: translateY(-3px);
+}
+
+.swatch-check {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: var(--bg);
+  font-size: 10px;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.swatch.active .swatch-check {
+  display: flex;
+}
+
+.swatch-name {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.swatch.active .swatch-name {
+  color: var(--text-primary);
+}
+
+@media (max-width: 600px) {
+  .step {
+    padding-left: var(--space-md);
+  }
+  .step-num {
+    left: -13px;
+  }
+}

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TuskerLabs</title>
+  <meta name="description" content="TuskerLabs builds AI research into products people actually use, on their own terms." />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("tuskerlabs-theme"); } catch (e) {}
+      if (saved) document.documentElement.setAttribute("data-theme", saved);
+    })();
+  </script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/index.html">
+        <img src="/assets/logo.svg" alt="TuskerLabs" />
+        TuskerLabs
+      </a>
+      <ul class="nav-links">
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#team">Team</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle theme">☾</button>
+        <a class="btn small" href="/trunk/index.html">Open Trunk</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="section" style="padding-top: var(--space-3xl); border-bottom: 1px solid var(--border);">
+    <div class="wrap hero-split">
+      <div class="reveal">
+        <div class="section-label">TuskerLabs</div>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.15; margin-bottom: var(--space-lg);">
+          AI research, turned into things you'd actually keep using.
+        </h1>
+        <p class="section-lede" style="margin-bottom: var(--space-xl);">
+          We're a small software lab working on applied AI. Our products aren't demos of what AI can do; they're
+          built to be genuinely convenient, so using them stops feeling like "trying out AI" and starts feeling like
+          just getting something done.
+        </p>
+        <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+          <a class="btn" href="/trunk/index.html">Meet Trunk, our first product</a>
+          <a class="btn neutral" href="#philosophy">Our philosophy</a>
+        </div>
+      </div>
+      <div class="reveal phone-shell">
+        <div class="phone-bezel">
+          <div class="phone-punch-hole"></div>
+          <div class="phone-screen">
+            <div class="phone-statusbar">
+              <span class="phone-time">12:34</span>
+              <span class="phone-battery-icon"><span class="phone-battery-fill"></span></span>
+            </div>
+            <div class="phone-content">
+              <div class="phone-header">
+                <span class="phone-title">Home</span>
+                <div class="phone-header-actions">
+                  <span class="phone-info-btn">i</span>
+                  <span class="phone-settings">SETTINGS</span>
+                </div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-title">This Device</div>
+                <div class="phone-card-line">10.9 GB RAM</div>
+                <div class="phone-accent-box">
+                  <div class="phone-accent-label">Suggested model size</div>
+                  <div class="phone-accent-value">up to ~8.3B parameters (Q4)</div>
+                </div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-title">Library</div>
+                <div class="phone-card-line">3 models downloaded</div>
+              </div>
+              <div class="phone-tabbar">
+                <span class="phone-tab active">⌂</span>
+                <span class="phone-tab">▤</span>
+                <span class="phone-tab">◧</span>
+                <span class="phone-tab">◈</span>
+                <span class="phone-tab">▷</span>
+              </div>
+            </div>
+            <div class="phone-home-indicator"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="philosophy">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-label">Philosophy</div>
+        <h2 class="section-title">Three things we hold ourselves to</h2>
+        <p class="section-lede">
+          "AI-powered" gets attached to almost anything now. We'd rather ship less and have each thing we ship
+          actually earn a permanent place on your device.
+        </p>
+      </div>
+      <div class="reveal-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-lg);">
+        <div class="card">
+          <div style="font-size: 1.6rem; margin-bottom: var(--space-sm); color: var(--accent);">01</div>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-sm);">Useful, not novel</h3>
+          <p class="text-secondary" style="font-size: 0.92rem; line-height: 1.6;">
+            A feature has to survive past the first week of curiosity. If it's only interesting because it's AI,
+            it's not interesting enough.
+          </p>
+        </div>
+        <div class="card">
+          <div style="font-size: 1.6rem; margin-bottom: var(--space-sm); color: var(--accent-secondary);">02</div>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-sm);">Private by default</h3>
+          <p class="text-secondary" style="font-size: 0.92rem; line-height: 1.6;">
+            Where it's technically possible, we'd rather run the model on your hardware than build a reason for you
+            to trust us with your data.
+          </p>
+        </div>
+        <div class="card">
+          <div style="font-size: 1.6rem; margin-bottom: var(--space-sm); color: var(--accent-tertiary);">03</div>
+          <h3 style="font-size: 1.05rem; margin-bottom: var(--space-sm);">Research-led, not trend-led</h3>
+          <p class="text-secondary" style="font-size: 0.92rem; line-height: 1.6;">
+            We follow what's actually improving (on-device inference, smaller capable models) over whatever's
+            loudest that quarter.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="products">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-label">Products</div>
+        <h2 class="section-title">What we've built so far</h2>
+      </div>
+      <div class="reveal-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg);">
+        <a class="card card-top-accent" href="/trunk/index.html" style="display: block; color: inherit;">
+          <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md);">
+            <img src="/assets/logo.svg" alt="Trunk" style="width: 44px; height: 44px;" />
+            <div>
+              <div style="font-family: var(--font-display); font-size: 1.6rem; line-height: 1;">Trunk</div>
+              <div class="text-secondary" style="font-size: 0.8rem;">Android · on-device LLM inference</div>
+            </div>
+          </div>
+          <p class="text-secondary" style="font-size: 0.92rem; line-height: 1.6; margin-bottom: var(--space-md);">
+            Download and chat with open LLMs entirely on your phone. No cloud, no account, nothing you type leaves
+            the device.
+          </p>
+          <span style="color: var(--accent); font-weight: 700; font-size: 0.88rem;">See how it works →</span>
+        </a>
+        <div class="card" style="border-style: dashed; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 0.9rem; text-align: center;">
+          More products are in research. We'd rather ship one thing well than three things half-finished.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="research">
+    <div class="wrap research-grid">
+      <div class="reveal">
+        <div class="section-label">Research</div>
+        <h2 class="section-title">Where this comes from</h2>
+        <p class="section-lede" style="margin-bottom: 0;">
+          Trunk exists because on-device inference (via llama.cpp and its ecosystem) reached the point where a
+          phone can run a genuinely capable model without a server in the loop. We track that frontier and build
+          when it's actually ready for daily use, not before.
+        </p>
+      </div>
+      <div class="reveal-group timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2023</div>
+          <div class="timeline-desc">llama.cpp makes CPU inference fast enough to matter outside a research lab.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2024</div>
+          <div class="timeline-desc">Quantization shrinks genuinely capable models into a phone's memory budget.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2026</div>
+          <div class="timeline-desc">Trunk ships: on-device inference finally convenient enough for daily use.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team" style="border-bottom: none;">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-label">Team</div>
+        <h2 class="section-title">Who's behind this</h2>
+      </div>
+      <div class="reveal-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-lg);">
+        <a class="card" href="https://www.linkedin.com/in/nawinviswajith/" target="_blank" rel="noopener" style="display: block; color: inherit;">
+          <h3 style="font-size: 1rem; margin-bottom: 2px;">Nawin Viswajith</h3>
+          <div class="text-secondary" style="font-size: 0.85rem; margin-bottom: var(--space-md);">Founder &amp; Developer</div>
+          <span style="color: var(--accent); font-weight: 700; font-size: 0.85rem;">LinkedIn →</span>
+        </a>
+        <a class="card" href="https://www.linkedin.com/in/preethalakshmi/" target="_blank" rel="noopener" style="display: block; color: inherit;">
+          <h3 style="font-size: 1rem; margin-bottom: 2px;">Preetha Lakshmi</h3>
+          <div class="text-secondary" style="font-size: 0.85rem; margin-bottom: var(--space-md);">Product &amp; Business Strategy</div>
+          <span style="color: var(--accent-secondary); font-weight: 700; font-size: 0.85rem;">LinkedIn →</span>
+        </a>
+        <a class="card" href="https://www.linkedin.com/in/p-venkataraman/" target="_blank" rel="noopener" style="display: block; color: inherit;">
+          <h3 style="font-size: 1rem; margin-bottom: 2px;">Venkataraman</h3>
+          <div class="text-secondary" style="font-size: 0.85rem; margin-bottom: var(--space-md);">Development &amp; Quality</div>
+          <span style="color: var(--accent-tertiary); font-weight: 700; font-size: 0.85rem;">LinkedIn →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img src="/assets/logo.svg" alt="TuskerLabs" />
+        TuskerLabs
+      </div>
+      <ul class="footer-links">
+        <li><a href="/trunk/index.html">Trunk</a></li>
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="https://forms.cloud.microsoft/r/ZetxpjPEkA" target="_blank" rel="noopener">Feedback</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

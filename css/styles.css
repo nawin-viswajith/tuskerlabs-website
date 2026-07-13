@@ -1,0 +1,970 @@
+/* ==========================================================================
+   TuskerLabs / Trunk shared design system
+   Mirrors app/src/theme/colors.ts, fonts.ts, layout.ts exactly:
+   flat, sharp-edged, no gradients, no border-radius except the same
+   deliberate exception list the app uses (circular swatches/FAB-style dots).
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700&family=Iceland&display=swap");
+
+:root {
+  /* light base (default) - app/src/theme/colors.ts lightBase, Sunset accent */
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-alt: #ecedf1;
+  --border: #d7dbe2;
+  --text-primary: #14181f;
+  --text-secondary: #5b6472;
+
+  --accent: #ea670c;
+  --accent-secondary: #dc2626;
+  --accent-tertiary: #a16207;
+
+  --running: #16a34a;
+  --error: #dc2626;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 80px;
+
+  --font-body: "Urbanist", -apple-system, sans-serif;
+  --font-display: "Iceland", "Urbanist", sans-serif;
+  --max-width: 1320px;
+}
+
+:root[data-theme="dark"] {
+  /* dark base - app/src/theme/colors.ts darkBase, Greyscale accent */
+  --bg: #0b0d10;
+  --surface: #141821;
+  --surface-alt: #1b212c;
+  --border: #2a3140;
+  --text-primary: #eaedf2;
+  --text-secondary: #9aa4b2;
+
+  --accent: #e5e5e5;
+  --accent-secondary: #a3a3a3;
+  --accent-tertiary: #737373;
+
+  --running: #22c55e;
+  --error: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+/* ---- layout ---- */
+
+.wrap {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section {
+  padding: var(--space-3xl) 0;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.3s ease;
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  margin-bottom: var(--space-md);
+}
+
+.section-lede {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 640px;
+  line-height: 1.65;
+  margin-bottom: var(--space-2xl);
+}
+
+/* ---- nav ---- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  /* Fully opaque, not translucent - a see-through blurred nav lets
+     high-contrast content (the phone mockups) ghost through as it scrolls
+     underneath, which reads as a rendering glitch rather than a nav bar. */
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.nav.scrolled {
+  border-bottom-color: var(--border);
+}
+
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: inherit;
+}
+
+.brand img {
+  width: 30px;
+  height: 30px;
+  display: block;
+}
+
+.brand .sub {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: 2px;
+  transition: color 0.2s ease;
+}
+
+.brand .sub:hover {
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* ---- buttons - one template, outlined, border=text color ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 11px 20px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  transform: translateY(-1px);
+}
+
+.btn.secondary {
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+
+.btn.secondary:hover {
+  background: color-mix(in srgb, var(--accent-secondary) 14%, transparent);
+}
+
+.btn.neutral {
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+.btn.neutral:hover {
+  background: var(--surface-alt);
+  color: var(--text-primary);
+}
+
+.btn.small {
+  padding: 7px 14px;
+  font-size: 0.8rem;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+/* ---- cards ---- */
+
+.card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: var(--space-lg);
+  transition: border-color 0.25s ease, transform 0.25s ease, background-color 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.card-top-accent {
+  border-top: 3px solid var(--accent-secondary);
+}
+
+/* ---- scroll reveal ---- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger children */
+.reveal-group > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal-group.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-group.is-visible > *:nth-child(1) { transition-delay: 0.02s; }
+.reveal-group.is-visible > *:nth-child(2) { transition-delay: 0.08s; }
+.reveal-group.is-visible > *:nth-child(3) { transition-delay: 0.14s; }
+.reveal-group.is-visible > *:nth-child(4) { transition-delay: 0.2s; }
+.reveal-group.is-visible > *:nth-child(5) { transition-delay: 0.26s; }
+.reveal-group.is-visible > *:nth-child(6) { transition-delay: 0.32s; }
+
+/* ---- hero split (text + phone shell) ---- */
+
+.hero-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .hero-split {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+/* ---- research timeline ---- */
+
+.research-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.timeline-item {
+  border-left: 2px solid var(--border);
+  padding-left: var(--space-md);
+  transition: border-color 0.25s ease;
+}
+
+.timeline-item:hover {
+  border-left-color: var(--accent);
+}
+
+.timeline-year {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+}
+
+.timeline-desc {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 800px) {
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- phone shell: an 18:9 device mockup showing a simplified render of
+   the app's Home screen, built from the same CSS custom properties so it
+   recolors live with the site's theme toggle / palette demo exactly like
+   the real app does when you change Settings. The bezel itself is a fixed
+   dark chassis color regardless of theme (hardware doesn't retheme, same
+   reasoning as the app's boot splash always rendering black+white). ---- */
+
+.phone-shell {
+  display: flex;
+  justify-content: center;
+}
+
+.phone-bezel {
+  position: relative;
+  width: 260px;
+  height: 520px;
+  background: #0a0a0c;
+  border-radius: 28px;
+  padding: 6px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+  font-family: var(--font-body);
+}
+
+.phone-punch-hole {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #000;
+  border: 1px solid #262626;
+  z-index: 2;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  transition: background-color 0.3s ease;
+}
+
+/* Minimal: just the time and a battery icon - no signal bars, no numeric
+   percentage label (a full icon already reads as "charged"). */
+.phone-statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 18px 2px;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.phone-time {
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.phone-battery-icon {
+  position: relative;
+  width: 20px;
+  height: 10px;
+  border: 1.5px solid var(--text-primary);
+  border-radius: 2px;
+  padding: 1px;
+  transition: border-color 0.3s ease;
+}
+
+.phone-battery-icon::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 3px;
+  width: 2px;
+  height: 4px;
+  background: var(--text-primary);
+  transition: background-color 0.3s ease;
+}
+
+.phone-battery-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--text-primary);
+  transition: background-color 0.3s ease;
+}
+
+.phone-content {
+  position: relative;
+  flex: 1;
+  padding: 10px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Multi-screen preview stack (used by the "How it works" phone): each
+   variant fills the same box and cross-fades in/out, so hovering a step
+   swaps the screen without resizing the phone. */
+.phone-screen-variant {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  right: 14px;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.phone-screen-variant.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.phone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-sm);
+}
+
+.phone-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.phone-settings {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.phone-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.phone-card-title {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.phone-card-line {
+  font-size: 0.58rem;
+  color: var(--text-secondary);
+}
+
+.phone-accent-box {
+  margin-top: var(--space-xs);
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  padding: 6px 8px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.phone-accent-label {
+  font-size: 0.52rem;
+  color: var(--text-secondary);
+}
+
+.phone-accent-value {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  transition: color 0.3s ease;
+}
+
+.phone-search-bar {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 6px 8px;
+  font-size: 0.56rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.phone-mini-flow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.phone-mini-node {
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent-secondary);
+  background: var(--bg);
+  font-size: 0.5rem;
+  font-weight: 700;
+  padding: 3px 5px;
+  color: var(--text-primary);
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.phone-mini-arrow {
+  color: var(--text-secondary);
+  font-size: 0.6rem;
+}
+
+.phone-chat-bubble {
+  align-self: flex-start;
+  max-width: 85%;
+  font-size: 0.56rem;
+  line-height: 1.4;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.phone-chat-bubble.user {
+  align-self: flex-end;
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.phone-chat-scroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.phone-switcher-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--space-sm);
+}
+
+.phone-switcher-chip {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 4px 6px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.phone-switcher-role {
+  font-size: 0.46rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.phone-switcher-value {
+  font-size: 0.56rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.phone-prompt-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-sm);
+  margin-top: var(--space-xs);
+  transition: border-color 0.3s ease;
+}
+
+.phone-prompt-input {
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 5px 8px;
+  font-size: 0.56rem;
+  color: var(--text-secondary);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.phone-prompt-send {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header actions: every root screen shows an info affordance (a "GUIDE"
+   text link, or a plain "i" circle on Home, which has no guided walkthrough)
+   plus a SETTINGS link, always together - never one without the other. */
+.phone-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.phone-info-btn {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.3px solid var(--text-secondary);
+  color: var(--text-secondary);
+  font-size: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.phone-fab-mini {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Matches the app's real BootSplash.tsx exactly: pure black regardless of
+   theme (the splash renders before the theme loads), logo scales down from
+   oversized to rest, then the wordmark fades in after. */
+.phone-screen-variant[data-screen="loading"] {
+  inset: 0;
+}
+
+.phone-loading {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-loading-logo {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 10px;
+  animation: phone-loading-logo-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.phone-loading-title {
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  animation: phone-loading-text-in 0.35s ease 0.55s both;
+}
+
+.phone-loading-subtitle {
+  color: #A6A6A6;
+  font-size: 0.56rem;
+  margin-top: 4px;
+  opacity: 0;
+  animation: phone-loading-text-in 0.35s ease 0.55s both;
+}
+
+@keyframes phone-loading-logo-in {
+  0% { transform: scale(1.6); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes phone-loading-text-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.phone-onboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  padding: 0 6px;
+}
+
+.phone-onboard-logo {
+  width: 32px;
+  height: 32px;
+}
+
+.phone-onboard-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.phone-onboard-desc {
+  font-size: 0.56rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.phone-onboard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.phone-onboard-skip {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+}
+
+.phone-onboard-next {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 10px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.phone-tabbar {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-xs);
+  margin-top: auto;
+  opacity: 1;
+  transition: border-color 0.3s ease, opacity 0.25s ease;
+}
+
+.phone-tabbar.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.phone-tab {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.phone-tab.active {
+  color: var(--accent);
+  transition: color 0.3s ease;
+}
+
+.phone-home-indicator {
+  width: 90px;
+  height: 4px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+  margin: 6px auto 4px;
+  opacity: 0.5;
+}
+
+@media (max-width: 560px) {
+  .phone-bezel {
+    width: 220px;
+    height: 440px;
+  }
+}
+
+/* ---- footer ---- */
+
+.footer {
+  padding: var(--space-2xl) 0;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.footer-brand img {
+  width: 20px;
+  height: 20px;
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+/* ---- utility ---- */
+
+.mono {
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 760px) {
+  .nav-links {
+    display: none;
+  }
+  .section {
+    padding: var(--space-2xl) 0;
+  }
+}
