@@ -1,7 +1,8 @@
-// Site-wide theme toggle - exactly two fixed looks, each a theme+accent
-// pair (not an independent dark/light + accent-picker combination):
-//   "onyx"     -> dark theme,  Greyscale accent
-//   "daylight" -> light theme, Sunset accent
+// Site-wide theme toggle - dark/light pairs with a default accent
+// (Greyscale/Sunset), but a chosen accent preset (see accent-presets.js,
+// which must load before this file) is a real persisted preference that
+// overrides the look's default and survives this toggle, not just a
+// same-page preview - only tapping a different swatch changes it.
 // The early inline script in <head> already set the initial data-theme
 // before paint (avoiding a flash); this wires up the button and the
 // matching accent override.
@@ -10,8 +11,8 @@
   if (!btn) return;
 
   var LOOKS = {
-    onyx: { theme: "dark", label: "☀", accent: "#E5E5E5", accentSecondary: "#A3A3A3", accentTertiary: "#737373" },
-    daylight: { theme: "light", label: "☾", accent: "#EA670C", accentSecondary: "#DC2626", accentTertiary: "#A16207" },
+    onyx: { theme: "dark", label: "☀", defaultPreset: "Greyscale" },
+    daylight: { theme: "light", label: "☾", defaultPreset: "Sunset" },
   };
 
   function currentLook() {
@@ -24,9 +25,10 @@
   function applyLook(name) {
     var look = LOOKS[name];
     document.documentElement.setAttribute("data-theme", look.theme);
-    document.documentElement.style.setProperty("--accent", look.accent);
-    document.documentElement.style.setProperty("--accent-secondary", look.accentSecondary);
-    document.documentElement.style.setProperty("--accent-tertiary", look.accentTertiary);
+    if (window.TuskerAccent) {
+      var presetName = window.TuskerAccent.resolvePresetName(look.defaultPreset);
+      window.TuskerAccent.applyPreset(presetName, look.theme);
+    }
     try {
       localStorage.setItem("tuskerlabs-theme", look.theme);
     } catch (e) {}

@@ -42,16 +42,26 @@
   height: 300px;
   border: 1.5px solid var(--text-secondary);
   background: var(--bg);
-  overflow: hidden;
-  touch-action: none;
+  /* Node slots go out to x=440 (+150 wide = 590px), wider than this fits on
+     most phones - scrollable instead of clipped, so every node stays
+     reachable instead of some being invisible with no way to get to them.
+     Only the background needs to scroll; individual node cards keep their
+     own touch-action:none so dragging one doesn't also scroll the canvas. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .flow-canvas-lines {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  /* Fixed, not 100% - has to cover the full scrollable width (see
+     .flow-canvas above), not just whatever's currently in view, or
+     connection lines get clipped for any node past the first screen. */
+  width: 640px;
+  height: 300px;
   pointer-events: none;
 }
 

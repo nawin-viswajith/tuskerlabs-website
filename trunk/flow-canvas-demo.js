@@ -74,9 +74,16 @@
   }
 
   function clampToCanvas(node) {
-    var rect = canvas.getBoundingClientRect();
-    node.x = Math.max(4, Math.min(rect.width - NODE_WIDTH - 4, node.x));
-    node.y = Math.max(4, Math.min(rect.height - NODE_HEIGHT - 4, node.y));
+    // scrollWidth/clientHeight, not getBoundingClientRect() - the canvas is
+    // horizontally scrollable now (see .flow-canvas in style.css) and node
+    // positions are in that full scrollable space, not just whatever's
+    // currently in view. Clamping to the visible rect would snap a node
+    // back into view the instant you tried to drag it after scrolling to
+    // reach it.
+    var maxX = canvas.scrollWidth - NODE_WIDTH - 4;
+    var maxY = canvas.clientHeight - NODE_HEIGHT - 4;
+    node.x = Math.max(4, Math.min(maxX, node.x));
+    node.y = Math.max(4, Math.min(maxY, node.y));
   }
 
   function createsCycle(fromId, toId) {
