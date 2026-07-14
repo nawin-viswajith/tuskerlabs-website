@@ -460,8 +460,6 @@
 @media (max-width: 860px) {
   .howitworks-grid {
     grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
   }
 }
 
