@@ -3,10 +3,37 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TuskerLabs</title>
-  <meta name="description" content="TuskerLabs builds AI research into products people actually use, on their own terms." />
+  <title>TuskerLabs — AI research, turned into things you'd actually keep using</title>
+  <meta name="description" content="TuskerLabs builds AI research into products people actually use, on their own terms. Makers of Trunk, an on-device LLM app for Android." />
+  <link rel="canonical" href="https://tuskerlabs-website.onrender.com/" />
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/css/styles.css" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TuskerLabs" />
+  <meta property="og:url" content="https://tuskerlabs-website.onrender.com/" />
+  <meta property="og:title" content="TuskerLabs — AI research, turned into things you'd actually keep using" />
+  <meta property="og:description" content="A small software lab working on applied AI. Makers of Trunk, an on-device LLM app for Android — no cloud, no account required." />
+  <meta property="og:image" content="https://tuskerlabs-website.onrender.com/assets/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="TuskerLabs — AI research, turned into things you'd actually keep using" />
+  <meta name="twitter:description" content="A small software lab working on applied AI. Makers of Trunk, an on-device LLM app for Android — no cloud, no account required." />
+  <meta name="twitter:image" content="https://tuskerlabs-website.onrender.com/assets/og-image.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "TuskerLabs",
+    "url": "https://tuskerlabs-website.onrender.com/",
+    "logo": "https://tuskerlabs-website.onrender.com/assets/logo.svg",
+    "sameAs": [
+      "https://www.linkedin.com/in/nawinviswajith/"
+    ]
+  }
+  </script>
+
   <script>
     (function () {
       var saved = null;
@@ -43,7 +70,7 @@
         <h1 style="font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.15; margin-bottom: var(--space-lg);">
           AI research, turned into things you'd actually keep using.
         </h1>
-        <p class="section-lede" style="margin-bottom: var(--space-xl);">
+        <p class="section-lede" style="max-width: none; margin-bottom: var(--space-xl);">
           We're a small software lab working on applied AI. Our products aren't demos of what AI can do; they're
           built to be genuinely convenient, so using them stops feeling like "trying out AI" and starts feeling like
           just getting something done.
@@ -101,7 +128,7 @@
       <div class="reveal">
         <div class="section-label">Philosophy</div>
         <h2 class="section-title">Three things we hold ourselves to</h2>
-        <p class="section-lede">
+        <p class="section-lede" style="max-width: none;">
           "AI-powered" gets attached to almost anything now. We'd rather ship less and have each thing we ship
           actually earn a permanent place on your device.
         </p>
@@ -168,7 +195,7 @@
       <div class="reveal">
         <div class="section-label">Research</div>
         <h2 class="section-title">Where this comes from</h2>
-        <p class="section-lede" style="margin-bottom: 0;">
+        <p class="section-lede" style="max-width: none; margin-bottom: 0;">
           Trunk exists because on-device inference (via llama.cpp and its ecosystem) reached the point where a
           phone can run a genuinely capable model without a server in the loop. We track that frontier and build
           when it's actually ready for daily use, not before.
