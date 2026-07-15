@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>Release Timeline — internal</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    /* Page-local only — deliberately not pulling in main.js's accent-preset
+       system (overkill for an internal tool), just the shared tokens plus
+       a lightweight local dark/light toggle. */
+    body { overflow-x: hidden; }
+
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+    .gate-card {
+      width: min(360px, calc(100% - 48px));
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: var(--space-xl);
+    }
+    .gate-card h1 {
+      font-size: 1.1rem;
+      margin-bottom: var(--space-xs);
+    }
+    .gate-card p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-bottom: var(--space-lg);
+      line-height: 1.55;
+    }
+    .gate-input-wrap {
+      position: relative;
+      margin-bottom: var(--space-md);
+    }
+    .gate-input {
+      width: 100%;
+      padding: 10px 40px 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 14px;
+    }
+    .gate-input:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .gate-reveal {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .gate-reveal:hover { color: var(--text-primary); }
+    .gate-reveal:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .gate-submit {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--accent);
+      color: #14181f;
+      border: none;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .gate-submit:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; }
+    .gate-error {
+      color: var(--error);
+      font-size: 12.5px;
+      margin-top: var(--space-sm);
+      min-height: 1em;
+    }
+
+    .content { display: none; }
+    .content.unlocked { display: block; }
+
+    .masthead {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-lg) var(--space-lg);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+    .masthead h1 { font-size: 1.6rem; }
+    .masthead .tag {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    /* Matches the main site's .icon-btn exactly (see css/styles.css) so the
+       theme toggle reads as the same control across both pages. */
+    .theme-toggle {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    }
+    .theme-toggle:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    main { max-width: var(--max-width); margin: 0 auto; padding: var(--space-xl) var(--space-lg) var(--space-3xl); }
+
+    .subhead {
+      color: var(--text-secondary);
+      font-size: 14.5px;
+      line-height: 1.6;
+      max-width: 62ch;
+      margin-bottom: var(--space-xl);
+    }
+    .subhead strong { color: var(--text-primary); }
+
+    .legend {
+      display: flex;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-2xl);
+      padding: 12px var(--space-md);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-secondary); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    .shipped-section { margin-bottom: var(--space-2xl); }
+    .shipped-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--running); margin-bottom: var(--space-md);
+    }
+    .shipped-row {
+      display: grid;
+      grid-template-columns: 88px 1fr;
+      gap: var(--space-md);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: baseline;
+    }
+    .shipped-row:first-child { border-top: 1px solid var(--border); }
+    .shipped-version { font-weight: 700; color: var(--running); font-size: 13px; white-space: nowrap; }
+    .shipped-summary { font-size: 13px; line-height: 1.55; color: var(--text-secondary); }
+    .shipped-summary strong { color: var(--text-primary); }
+    .hotfix-tag {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--accent-secondary); background: color-mix(in srgb, var(--accent-secondary) 16%, var(--surface));
+      padding: 1px 6px; margin-right: 6px; display: inline-block;
+    }
+    code.inline {
+      font-family: ui-monospace, "SFMono-Regular", monospace;
+      background: var(--surface-alt);
+      padding: 1px 5px;
+      font-size: 12px;
+    }
+
+    .timeline { position: relative; padding-left: 26px; }
+    .timeline::before {
+      content: ""; position: absolute; left: 5px; top: 8px; bottom: 8px; width: 1px; background: var(--border);
+    }
+    .entry { position: relative; padding-bottom: var(--space-xl); }
+    .entry:last-child { padding-bottom: 0; }
+    .node {
+      position: absolute; left: -26px; top: 6px; width: 11px; height: 11px; border-radius: 50%;
+      border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--border);
+    }
+    .node.building { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .node.planned { background: var(--bg); box-shadow: 0 0 0 1.5px var(--accent-tertiary); }
+    .node.speculative { background: var(--bg); box-shadow: 0 0 0 1.5px var(--text-secondary); }
+
+    .entry-head { display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap; margin-bottom: 6px; }
+    .version { font-weight: 700; font-size: 16px; }
+    .status-pill {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 3px 8px; border: 1px solid;
+    }
+    .status-pill.building { color: var(--accent); border-color: var(--accent); }
+    .status-pill.planned { color: var(--accent-tertiary); border-color: var(--accent-tertiary); }
+    .status-pill.speculative { color: var(--text-secondary); border-color: var(--border); }
+
+    .entry-title { font-size: 15px; font-weight: 700; margin-bottom: var(--space-sm); }
+    .entry-body { background: var(--surface); border: 1px solid var(--border); padding: var(--space-md) var(--space-lg); }
+
+    .feature-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .feature-list li { font-size: 13.5px; line-height: 1.55; color: var(--text-secondary); padding-left: 15px; position: relative; }
+    .feature-list li::before {
+      content: ""; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--text-secondary);
+    }
+    .feature-list li strong { color: var(--text-primary); }
+    .feature-list li.done::before { background: var(--running); }
+
+    .note {
+      margin-top: var(--space-sm); padding-top: var(--space-sm); border-top: 1px dashed var(--border);
+      font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;
+    }
+    .branch-note {
+      font-size: 12.5px; color: var(--text-secondary); margin-top: var(--space-sm); padding: 8px 12px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border-left: 2px solid var(--accent); line-height: 1.5;
+    }
+    .branch-note strong { color: var(--accent); }
+
+    .open-q {
+      margin-top: var(--space-2xl); padding: var(--space-lg) var(--space-xl);
+      background: color-mix(in srgb, var(--accent) 8%, var(--surface)); border: 1px solid var(--accent);
+    }
+    .open-q .oq-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-sm);
+    }
+    .open-q p { font-size: 14px; line-height: 1.6; margin-bottom: var(--space-sm); }
+    .open-q p:last-child { margin-bottom: 0; }
+    .open-q .oq-sub { color: var(--text-secondary); font-size: 13px; }
+
+    footer.page-footer { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-lg) var(--space-2xl); font-size: 11.5px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <h1>Trunk — internal</h1>
+      <p>Release timeline for the core team. Enter the shared password to continue.</p>
+      <div class="gate-input-wrap">
+        <input type="password" class="gate-input" id="gate-password" placeholder="Password" autocomplete="off" />
+        <button class="gate-reveal" id="gate-reveal" type="button" aria-label="Show password" aria-pressed="false">⊙</button>
+      </div>
+      <button class="gate-submit" id="gate-submit" type="button">Continue</button>
+      <div class="gate-error" id="gate-error"></div>
+    </div>
+  </div>
+
+  <div class="content" id="content">
+    <div class="masthead">
+      <div>
+        <h1>Trunk Release Timeline</h1>
+        <span class="tag">v1.0 → v1.10 · internal draft</span>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle theme">☀</button>
+    </div>
+
+    <main>
+      <p class="subhead">
+        Full release history and forward plan for <strong>Trunk</strong> — shipped
+        releases pulled from the real GitHub release notes, future ones in the
+        order they were dictated. Most of the back half is unscoped and
+        undesigned; this exists so nothing gets lost between conversations.
+      </p>
+
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background: var(--running)"></span>Shipped</div>
+        <div class="legend-item"><span class="legend-dot" style="background: var(--accent)"></span>Building now</div>
+        <div class="legend-item"><span class="legend-dot" style="border: 1.5px solid var(--accent-tertiary); background: transparent"></span>Planned</div>
+        <div class="legend-item"><span class="legend-dot" style="border: 1.5px solid var(--text-secondary); background: transparent"></span>Speculative / "just a thought"</div>
+      </div>
+
+      <div class="shipped-section">
+        <div class="shipped-label">Shipped — from the real release notes</div>
+
+        <div class="shipped-row">
+          <span class="shipped-version">v1.0.0</span>
+          <span class="shipped-summary">Initial on-device inference release — the rebrand from PocketCoder to <strong>Trunk</strong>, first version published to both repos.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.1.0</span>
+          <span class="shipped-summary">Developer Options (diagnostics suite, failure log, storage inspector), <strong>plain-text file attachments</strong>, live inference-unit indicator. Fixed Flow canvas bugs, markdown gaps, models echoing their own system prompt, and app-wide em-dash rendering.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.2.0</span>
+          <span class="shipped-summary"><strong>GPU (Adreno/OpenCL) acceleration</strong> — detects and offloads inference to Qualcomm Adreno 700+ GPUs, with a Settings toggle and onboarding step.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.0</span>
+          <span class="shipped-summary"><strong>Hexagon NPU acceleration</strong> on supported Qualcomm chipsets.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.1</span>
+          <span class="shipped-summary">Chat sessions stay pinned to the inference unit (NPU/GPU/CPU) they started on, even if the Settings toggle changes mid-chat. Composer token meter no longer dips after sending.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.2</span>
+          <span class="shipped-summary">Flows got their own generation settings (temperature/topP/topK/context/max tokens). "Run via Flow" inside a Project now correctly uses the project's settings. Added <code class="inline">android:largeHeap</code> to stop background low-memory kills.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.3</span>
+          <span class="shipped-summary">Fixed the keyboard covering form fields in New Project, New Flow, and Agent Editor modals.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.4</span>
+          <span class="shipped-summary">Developer Options promoted to a mainstream Settings section. Opt-in <strong>Usage Logging</strong> with explicit consent + Send Logs. App version and release notes on the About screen. Keep Screen On setting. Several Flow/download reliability fixes.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.5</span>
+          <span class="shipped-summary"><span class="hotfix-tag">Hotfix</span>v1.3.4 crashed on launch for every user (<code class="inline">NoClassDefFoundError</code> from an Expo SDK version mismatch in <code class="inline">expo-keep-awake</code>). Also removed the backend URL debug display.</span>
+        </div>
+      </div>
+
+      <div class="timeline">
+
+        <div class="entry">
+          <div class="node building"></div>
+          <div class="entry-head">
+            <span class="version">v1.3.6</span>
+            <span class="status-pill building">Pre-release — pending device verification</span>
+          </div>
+          <p class="entry-title">Recommended models, NPU/GPU fixes, crash-report hardening</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li class="done"><strong>HF search "Recommended" list</strong> — filters to models sized for the device's RAM by default; a disclaimer flags non-quantized or non-chat models before download</li>
+              <li class="done"><strong>Fixed stale NPU/GPU label</strong> on Inference; toggle now hides (with an info button) on unsupported devices</li>
+              <li class="done"><strong>Crash reports</strong> now require a shared secret + rate limit, and attach recent error-log entries</li>
+              <li class="done"><strong>Onboarding warnings</strong> require a 5-second read before continuing</li>
+            </ul>
+            <div class="note">Tagged and built on the draft repo, marked pre-release on GitHub pending a real device test. Not yet promoted to the public <code class="inline">trunk-android</code> repo.</div>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node planned"></div>
+          <div class="entry-head">
+            <span class="version">v1.4.0a</span>
+            <span class="status-pill planned">Next up</span>
+          </div>
+          <p class="entry-title">Speech-to-text and text-to-speech</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>Audio <strong>input</strong> — speech-to-text for the composer, in place of (or alongside) typing</li>
+              <li>Audio <strong>output</strong> — text-to-speech for model responses</li>
+            </ul>
+            <div class="branch-note">
+              <strong>Versioning rule as given:</strong> if this turns out easy and doesn't need heavy testing, it ships directly as <strong>v1.4.0</strong>. If it needs real testing first, it ships as pre-release <strong>v1.4.0a</strong> — full <strong>v1.4.0</strong> follows once that testing is done.
+            </div>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node planned"></div>
+          <div class="entry-head">
+            <span class="version">v1.3.7 <span style="opacity:0.6">or</span> v1.4.1</span>
+            <span class="status-pill planned">Depends on v1.4.0 path</span>
+          </div>
+          <p class="entry-title">Model storage moves to <code class="inline">downloads/</code></p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>Downloaded GGUF models saved to the public <strong>Downloads</strong> folder instead of internal app storage — so they survive an APK uninstall/reinstall</li>
+              <li>Storage permission requested at <strong>app startup</strong>; if denied, re-prompt every time the user opens the <strong>Models</strong> or <strong>Hugging Face</strong> page</li>
+            </ul>
+            <div class="branch-note">
+              <strong>Versioning rule as given:</strong> ships as <strong>v1.3.7</strong> if v1.4.0 goes out as the pre-release <strong>v1.4.0a</strong>. Ships as <strong>v1.4.1</strong> if v1.4.0 ships as a proper full release instead.
+            </div>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node speculative"></div>
+          <div class="entry-head">
+            <span class="version">v1.5</span>
+            <span class="status-pill speculative">Speculative</span>
+          </div>
+          <p class="entry-title">External API support + agent marketplace</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>Support for <strong>any</strong> external LLM API, not one fixed provider</li>
+              <li>Agents can run against those external APIs, not just on-device models</li>
+              <li><strong>Prebuilt agent packages</strong>, designed in-house and hosted on GitHub, downloadable from inside the app</li>
+              <li>Open the same mechanism to the <strong>community</strong> — users design and submit their own agents</li>
+              <li>Explore compatibility with <strong>Google's ADK</strong> (Agent Development Kit) — floated as "just a thought," not committed</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node speculative"></div>
+          <div class="entry-head">
+            <span class="version">v1.6</span>
+            <span class="status-pill speculative">Speculative</span>
+          </div>
+          <p class="entry-title">Phone as local host</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>A phone can act as a <strong>host</strong>, serving its loaded model to other devices on the same network</li>
+              <li>Android-to-Android: host mode to send, client mode to receive</li>
+              <li>Android-to-PC: the PC side connects via terminal — something SSH-like to ping the host and pull data</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node speculative"></div>
+          <div class="entry-head">
+            <span class="version">v1.7</span>
+            <span class="status-pill speculative">Speculative</span>
+          </div>
+          <p class="entry-title">Multimodal input</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>Input beyond plain text — images and other modalities feeding into a chat or Flow</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node speculative"></div>
+          <div class="entry-head">
+            <span class="version">v1.8</span>
+            <span class="status-pill speculative">Speculative</span>
+          </div>
+          <p class="entry-title">Embeddings + RAG</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>On-device embeddings and retrieval-augmented generation over the user's own documents/models</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node speculative"></div>
+          <div class="entry-head">
+            <span class="version">v1.9</span>
+            <span class="status-pill speculative">Speculative</span>
+          </div>
+          <p class="entry-title">Acyclic graph agents</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>Tree-structured agent flows — branching beyond today's linear Playground Flows</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="node speculative"></div>
+          <div class="entry-head">
+            <span class="version">v1.10</span>
+            <span class="status-pill speculative">Speculative</span>
+          </div>
+          <p class="entry-title">Cyclic graph agents</p>
+          <div class="entry-body">
+            <ul class="feature-list">
+              <li>Loops in the agent flow graph — agents that can revisit earlier steps</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="open-q">
+        <div class="oq-label">Unresolved — flagged alongside this roadmap</div>
+        <p>Who is this app actually for, and why would someone switch from Gemini, Claude, or ChatGPT to use it?</p>
+        <p class="oq-sub">Every line above adds capability, but none of them is yet the answer to that question. Worth revisiting before v1.5 — the two ideas on this board with the most "nobody else does this" shape are <strong>v1.5's community agent marketplace</strong> and <strong>v1.6's phone-as-host</strong>.</p>
+      </div>
+    </main>
+
+    <footer class="page-footer">trunk-by-tuskerlabs · internal roadmap draft</footer>
+  </div>
+
+  <script>
+    (function () {
+      // Password gate: client-side only, no server enforcement — keeps this
+      // page out of casual view and off search engines (see robots.txt +
+      // absence from sitemap.xml), not a real security boundary against
+      // someone who reads this script's source. Deliberately not persisted
+      // to sessionStorage/localStorage — navigating away (even within the
+      // same tab) and back should ask again, and any unlock state that
+      // survives a page load would defeat that.
+      var STORED_HASH = "d7b09cc9b0b6c63564a732baf5478f0b2647d3f6b5b3cd62016d7c10b244a0b6";
+
+      async function sha256Hex(text) {
+        var data = new TextEncoder().encode(text);
+        var digest = await crypto.subtle.digest("SHA-256", data);
+        return Array.from(new Uint8Array(digest)).map(function (b) {
+          return b.toString(16).padStart(2, "0");
+        }).join("");
+      }
+
+      function unlock() {
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("content").classList.add("unlocked");
+      }
+
+      var input = document.getElementById("gate-password");
+      var submit = document.getElementById("gate-submit");
+      var error = document.getElementById("gate-error");
+      var reveal = document.getElementById("gate-reveal");
+
+      reveal.addEventListener("click", function () {
+        var showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        reveal.textContent = showing ? "⊙" : "⊘";
+        reveal.setAttribute("aria-pressed", showing ? "false" : "true");
+        reveal.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      });
+
+      async function tryUnlock() {
+        var hash = await sha256Hex(input.value);
+        if (hash === STORED_HASH) {
+          unlock();
+        } else {
+          error.textContent = "Wrong password.";
+          input.value = "";
+          input.focus();
+        }
+      }
+
+      submit.addEventListener("click", tryUnlock);
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") tryUnlock();
+      });
+    })();
+
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById("theme-toggle");
+      var stored = null;
+      try { stored = localStorage.getItem("trunk-admin-theme"); } catch (e) {}
+      if (stored) root.setAttribute("data-theme", stored);
+      else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) root.setAttribute("data-theme", "dark");
+
+      // Icon shows the destination, not the current state - a moon while
+      // in light mode ("switch to dark"), a sun while in dark mode
+      // ("switch to light").
+      function syncIcon() {
+        var isDark = root.getAttribute("data-theme") === "dark";
+        toggle.textContent = isDark ? "☀" : "☾";
+      }
+      syncIcon();
+
+      toggle.addEventListener("click", function () {
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("trunk-admin-theme", next); } catch (e) {}
+        syncIcon();
+      });
+    })();
+  </script>
+</body>
+</html>

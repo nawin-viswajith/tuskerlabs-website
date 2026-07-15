@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /trunk/admin/
 
 Sitemap: https://tuskerlabs-website.onrender.com/sitemap.xml
