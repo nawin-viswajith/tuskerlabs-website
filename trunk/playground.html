@@ -3,11 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Playground, Trunk by TuskerLabs</title>
-  <meta name="description" content="Chain reusable Agents into a Flow and run multi-step AI pipelines entirely on-device, no cloud involved." />
+  <title>Playground — Visual multi-agent AI pipelines, Trunk by TuskerLabs</title>
+  <meta name="description" content="Chain reusable Agents into a Flow and run multi-step AI pipelines entirely on-device, no cloud involved. Try the interactive canvas demo." />
+  <link rel="canonical" href="https://tuskerlabs-website.onrender.com/trunk/playground.html" />
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="stylesheet" href="/trunk/style.css" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TuskerLabs" />
+  <meta property="og:url" content="https://tuskerlabs-website.onrender.com/trunk/playground.html" />
+  <meta property="og:title" content="Playground — Visual multi-agent AI pipelines" />
+  <meta property="og:description" content="Chain reusable Agents into a Flow and run multi-step AI pipelines entirely on-device, no cloud involved." />
+  <meta property="og:image" content="https://tuskerlabs-website.onrender.com/assets/og-image.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Playground — Visual multi-agent AI pipelines" />
+  <meta name="twitter:description" content="Chain reusable Agents into a Flow and run multi-step AI pipelines entirely on-device, no cloud involved." />
+  <meta name="twitter:image" content="https://tuskerlabs-website.onrender.com/assets/og-image.png" />
+
   <script>
     (function () {
       var saved = null;
@@ -103,9 +117,12 @@
     </div>
     <div class="wrap">
       <div class="reveal flow-canvas-wrap">
-        <div class="flow-canvas-label">Try it: drag agents around, tap an output dot then an input dot to connect, tap the × on a connection to remove it, hold an agent to delete it, tap + to add one.</div>
+        <div class="flow-canvas-label">Try it: drag the background to pan, drag an agent to move it, tap an output dot then an input dot to connect, tap the × on a connection to remove it, hold an agent to delete it, tap + to add one.</div>
         <div class="flow-canvas" id="flow-canvas">
-          <svg class="flow-canvas-lines" id="flow-canvas-lines"></svg>
+          <div class="flow-canvas-content" id="flow-canvas-content">
+            <svg class="flow-canvas-lines" id="flow-canvas-lines"></svg>
+          </div>
+          <button class="flow-canvas-reset" id="flow-canvas-reset" type="button" aria-label="Recenter canvas" title="Recenter canvas">⟲</button>
           <button class="flow-fab" id="flow-fab" aria-label="Add agent">+</button>
           <div class="flow-fab-menu" id="flow-fab-menu"></div>
         </div>

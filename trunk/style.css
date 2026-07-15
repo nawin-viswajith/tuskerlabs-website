@@ -37,31 +37,87 @@
   margin-bottom: var(--space-sm);
 }
 
+/* Sits beside the FAB (left of it, same bottom alignment) rather than up
+   in the instructions row - the two are the pair of canvas-level controls
+   (add a node / recenter the view), so grouping them in the same corner
+   reads as "canvas controls live here" at a glance. Left of the FAB rather
+   than stacked above it, since directly above is exactly where the FAB's
+   own menu opens (.flow-fab-menu) and the two would otherwise overlap.
+   Hidden by default (only a .visible toggle in flow-canvas-demo.js shows
+   it) - it's purely a "the view has drifted off-center" shortcut, not a
+   permanent fixture, so it never sits there implying there's something to
+   undo when the view is already exactly where it started. */
+.flow-canvas-reset {
+  position: absolute;
+  right: calc(52px + var(--space-md) + var(--space-sm));
+  bottom: var(--space-md);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  transition: opacity 0.15s ease, transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.flow-canvas-reset.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.flow-canvas-reset:hover {
+  border-color: var(--accent);
+}
+
 .flow-canvas {
   position: relative;
   height: 300px;
   border: 1.5px solid var(--text-secondary);
   background: var(--bg);
-  /* Node slots go out to x=440 (+150 wide = 590px), wider than this fits on
-     most phones - scrollable instead of clipped, so every node stays
-     reachable instead of some being invisible with no way to get to them.
-     Only the background needs to scroll; individual node cards keep their
-     own touch-action:none so dragging one doesn't also scroll the canvas. */
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
+  /* Content (nodes + lines) is larger than this viewport and pans via
+     .flow-canvas-content's transform instead of native scroll - overflow
+     stays hidden so a panned node never spills past the border. Dragging
+     the background pans; dragging a node still just moves that node (each
+     card's own touch-action:none, unchanged, keeps the two from fighting). */
+  overflow: hidden;
+  cursor: grab;
   transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.flow-canvas.panning {
+  cursor: grabbing;
+}
+
+.flow-canvas-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Panned via a plain top/left offset (not transform: translate) so the
+     absolutely-positioned node children's own x/y math (NODE_WIDTH/HEIGHT-
+     based hit testing, handleCenter, etc. in flow-canvas-demo.js) stays in
+     the same coordinate space as this container, no scale/transform math
+     needed on top of it. */
 }
 
 .flow-canvas-lines {
   position: absolute;
   top: 0;
   left: 0;
-  /* Fixed, not 100% - has to cover the full scrollable width (see
-     .flow-canvas above), not just whatever's currently in view, or
-     connection lines get clipped for any node past the first screen. */
-  width: 640px;
-  height: 300px;
+  /* Generously larger than the viewport so panning never runs out of line
+     canvas before it runs out of actual content to show. Matches
+     CONTENT_WIDTH/HEIGHT in flow-canvas-demo.js. */
+  width: 2200px;
+  height: 1500px;
   pointer-events: none;
 }
 
