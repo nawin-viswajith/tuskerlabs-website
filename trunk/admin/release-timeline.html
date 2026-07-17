@@ -320,6 +320,18 @@
           <span class="shipped-version">v1.3.5</span>
           <span class="shipped-summary"><span class="hotfix-tag">Hotfix</span>v1.3.4 crashed on launch for every user (<code class="inline">NoClassDefFoundError</code> from an Expo SDK version mismatch in <code class="inline">expo-keep-awake</code>). Also removed the backend URL debug display.</span>
         </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.6</span>
+          <span class="shipped-summary">HF search <strong>"Recommended" list</strong> filtered to the device's RAM, with a disclaimer on non-quantized/non-chat models. <strong>Crash Reporting</strong> (on by default, separate from Usage Logging), with a shared secret, rate limit, and attached error-log entries. Fixed the stale NPU/GPU label on Inference. Onboarding warnings now require a 5-second read.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.7</span>
+          <span class="shipped-summary">Fully offline <strong>LaTeX math rendering</strong> (SVG, no WebView) and <strong>Mermaid flowchart rendering</strong> in chat responses, each with a copy button (flowcharts copy as PNG); code blocks and full assistant responses got copy buttons too. Chats are now <strong>auto-titled</strong> from their first exchange, and can be renamed or deleted. New <strong>"Back up downloads"</strong> setting copies downloaded models to a user-chosen folder so they survive an uninstall.</span>
+        </div>
+        <div class="shipped-row">
+          <span class="shipped-version">v1.3.8</span>
+          <span class="shipped-summary">Trunk now checks the public <code class="inline">trunk-android</code> GitHub releases on launch and shows an <strong>"Update available"</strong> notice with a link when a newer version is out.</span>
+        </div>
       </div>
 
       <div class="timeline">
@@ -327,18 +339,17 @@
         <div class="entry">
           <div class="node building"></div>
           <div class="entry-head">
-            <span class="version">v1.3.6</span>
+            <span class="version">v1.3.8a</span>
             <span class="status-pill building">Pre-release — pending device verification</span>
           </div>
-          <p class="entry-title">Recommended models, NPU/GPU fixes, crash-report hardening</p>
+          <p class="entry-title">RAM check before model load, crash breadcrumb, storage key rename</p>
           <div class="entry-body">
             <ul class="feature-list">
-              <li class="done"><strong>HF search "Recommended" list</strong> — filters to models sized for the device's RAM by default; a disclaimer flags non-quantized or non-chat models before download</li>
-              <li class="done"><strong>Fixed stale NPU/GPU label</strong> on Inference; toggle now hides (with an info button) on unsupported devices</li>
-              <li class="done"><strong>Crash reports</strong> now require a shared secret + rate limit, and attach recent error-log entries</li>
-              <li class="done"><strong>Onboarding warnings</strong> require a 5-second read before continuing</li>
+              <li class="done"><strong>RAM check before load</strong> — Inference chat send and Craft-with-AI check free RAM before loading a model and ask for confirmation if it's likely to OOM, instead of silently attempting it</li>
+              <li class="done"><strong>Crash breadcrumb</strong> — a durable marker is written right before a model release/load and cleared on success, so a native crash (llama.cpp OOM/segfault) that kills the process before any JS handler runs still gets reported next launch</li>
+              <li class="done"><strong>Storage keys renamed</strong> from the old <code class="inline">pocketcoder-</code> prefix to <code class="inline">trunk-</code>, with a one-time migration at boot so existing installs keep their settings/projects/flows</li>
             </ul>
-            <div class="note">Tagged and built on the draft repo, marked pre-release on GitHub pending a real device test. Not yet promoted to the public <code class="inline">trunk-android</code> repo.</div>
+            <div class="note">Tagged and built on the draft repo, pending a real device test. Not yet promoted to the public <code class="inline">trunk-android</code> repo.</div>
           </div>
         </div>
 
@@ -363,8 +374,8 @@
         <div class="entry">
           <div class="node planned"></div>
           <div class="entry-head">
-            <span class="version">v1.3.7 <span style="opacity:0.6">or</span> v1.4.1</span>
-            <span class="status-pill planned">Depends on v1.4.0 path</span>
+            <span class="version">v1.4.1</span>
+            <span class="status-pill planned">Planned</span>
           </div>
           <p class="entry-title">Model storage moves to <code class="inline">downloads/</code></p>
           <div class="entry-body">
@@ -373,7 +384,7 @@
               <li>Storage permission requested at <strong>app startup</strong>; if denied, re-prompt every time the user opens the <strong>Models</strong> or <strong>Hugging Face</strong> page</li>
             </ul>
             <div class="branch-note">
-              <strong>Versioning rule as given:</strong> ships as <strong>v1.3.7</strong> if v1.4.0 goes out as the pre-release <strong>v1.4.0a</strong>. Ships as <strong>v1.4.1</strong> if v1.4.0 ships as a proper full release instead.
+              <strong>Superseded numbering:</strong> originally slotted as v1.3.7, but that number shipped instead with math/mermaid rendering and a "Back up downloads" <em>copy</em> setting (v1.3.7) — a durable backup, not the actual relocation described here, which is still outstanding.
             </div>
           </div>
         </div>
